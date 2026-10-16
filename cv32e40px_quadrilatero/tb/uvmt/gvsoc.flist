@@ -1,0 +1,13 @@
+
+// RVVI Infrastructure
+${CORE_V_VERIF}/vendor_lib/gvsoc_rvvi/RVVI/source/host/rvvi/rvviApiPkg.sv
+${CORE_V_VERIF}/vendor_lib/gvsoc_rvvi/RVVI/source/host/rvvi/rvviTrace.sv
+
+// RVVI trace2api driver (open-source, RVVI-TRACE -> RVVI-API, GVSOC-only)
+${CORE_V_VERIF}/vendor_lib/gvsoc_rvvi/rvvi_trace2api.sv
+
+// uvma_rvvi agent package
+// -f ${DV_UVMA_RVVI_PATH}/uvma_rvvi_pkg.flist
+
+// GVSOC Wrapper
+${TBSRC_HOME}/uvmt/uvmt_cv32e40p_gvsoc_wrap.sv

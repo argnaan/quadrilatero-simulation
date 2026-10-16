@@ -1,0 +1,12 @@
+name: cv32e40p_hpm_counter_access_test
+uvm_test: uvmt_$(CV_CORE_LC)_firmware_test_c
+description: >
+    Directed HPM counter CSR access test. Touches every
+    mhpmcounter3..31 / mhpmcounter3h..31h / mhpmevent3..31 address
+    (read and write), the mcycle/minstret/mcycleh/minstreth registers
+    and the mcountinhibit WARL boundary, and exercises the
+    event-driven increment of mhpmcounter3. Closes the CSR decoder
+    case-arm branch-coverage gaps with NUM_MHPMCOUNTERS=1.
+    Self-checks assume NUM_MHPMCOUNTERS=1 (do not run with
+    cfg num_mhpmcounter_29). No FP instructions: runs on
+    pulp / pulp_fpu / pulp_fpu_zfinx.

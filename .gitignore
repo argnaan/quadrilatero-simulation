@@ -97,3 +97,7 @@ cv32e40p/sim/uvmt/regress_results/
 
 # uvmt makefile for questasim (keeping default paths)
 /mk/uvmt/vsim.mk
+
+# server-dependent configuration 
+sourceme_mamuthones.sh
+bin/my_venv/*

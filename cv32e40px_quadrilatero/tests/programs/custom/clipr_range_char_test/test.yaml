@@ -1,0 +1,6 @@
+name: clipr_range_char_test
+uvm_test: uvmt_$(CV_CORE_LC)_firmware_test_c
+description: >
+    Characterization test for cv.clipr/cv.clipur behavior with negative rs2
+    operands (degenerate clip range, low=~rs2 > high=rs2). Requires CFG=pulp
+    (XPULP extension) for the custom clip instructions.
