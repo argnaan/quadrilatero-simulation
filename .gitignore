@@ -101,3 +101,4 @@ cv32e40p/sim/uvmt/regress_results/
 # server-dependent configuration 
 sourceme_mamuthones.sh
 bin/my_venv/*
+cv32e40px_quadrilatero/sim/core/etch392559

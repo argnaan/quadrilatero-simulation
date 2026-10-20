@@ -84,8 +84,8 @@ int main(int argc, char *argv[])
 
     /* Print a banner to stdout and interpret MISA CSR */
     printf("\nHELLO WORLD!!!\n");
-    printf("This is the OpenHW Group CV32E40P CORE-V processor core.\n");
-    printf("CV32E40P is a RISC-V ISA compliant core with the following attributes:\n");
+    printf("This is the OpenHW Group CV32E40PX CORE-V processor core.\n");
+    printf("CV32E40PX is a RISC-V ISA compliant core with the following attributes:\n");
     printf("\tmvendorid = 0x%x\n", mvendorid_rval);
     printf("\tmarchid   = 0x%x\n", marchid_rval);
     printf("\tmimpid    = 0x%x\n", mimpid_rval);

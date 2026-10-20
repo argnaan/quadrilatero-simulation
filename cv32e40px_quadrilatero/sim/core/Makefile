@@ -56,7 +56,17 @@ CV_CORE_UC     = $(shell echo $(CV_CORE) | tr a-z A-Z)
 CV_SIMULATOR   ?= vsim
 SIMULATOR      ?= $(CV_SIMULATOR)
 
+VSIM_FLAGS       ?=+rand_stall_obi_disable
+
+# Default "custom test-program"
+CUSTOM_PROG  ?= matmul
+TEST         ?= matmul
+
+# Toolchain and compiler settings
 CV_SW_MARCH    ?= rv32imc_xtheadmatrix0p1      
+CV_SW_TOOLCHAIN ?= /srv/home/andrea.argnani5/tesi/my_toolchain
+CV_SW_PREFIX 	?= riscv64-unknown-elf-
+CV_SW_MARCH 	?= rv32imc_xtheadmatrix0p1
 
 # Test-Program directores.
 # Relative path is used for Verilator which cannot seem to handle loooong pathnames.
@@ -74,9 +84,6 @@ SIM_BSP_RESULTS          = $(SIM_TEST_PROGRAM_RESULTS)/bsp
 # Compile compile flags for all simulators
 SV_CMP_FLAGS =
 
-# Default "custom test-program"
-CUSTOM_PROG  ?= hello-world
-TEST         ?= hello-world
 
 ###############################################################################
 # Generate and include TEST_FLAGS_MAKE, based on the YAML test description.
@@ -189,7 +196,7 @@ TBSRC_TOP   := $(TBSRC_HOME)/core/tb_top.sv
 TBSRC_CORE  := $(TBSRC_HOME)/core
 TBSRC_PKG   := $(TBSRC_CORE)/tb_riscv/include/perturbation_defines.sv
 TBSRC       := $(TBSRC_CORE)/tb_top.sv \
-               $(TBSRC_CORE)/cv32e40p_core_tb_wrapper.sv \
+               $(TBSRC_CORE)/cv32e40px_core_tb_wrapper.sv \
                $(TBSRC_CORE)/mm_ram.sv \
                $(TBSRC_CORE)/dp_ram.sv \
 			   $(TBSRC_CORE)/tb_mem_arb.sv \
@@ -205,7 +212,7 @@ RTLSRC_VLOG_TB_TOP	:= $(basename $(notdir $(TBSRC_TOP)))
 RTLSRC_VOPT_TB_TOP	:= $(addsuffix _vopt, $(RTLSRC_VLOG_TB_TOP))
 
 TBSRC_VERI  := $(TBSRC_CORE)/tb_top_verilator.sv \
-               $(TBSRC_CORE)/cv32e40p_core_tb_wrapper.sv \
+               $(TBSRC_CORE)/cv32e40px_core_tb_wrapper.sv \
                $(TBSRC_CORE)/tb_riscv/riscv_rvalid_stall.sv \
                $(TBSRC_CORE)/tb_riscv/riscv_gnt_stall.sv \
                $(TBSRC_CORE)/mm_ram.sv \
@@ -515,7 +522,7 @@ sanity-veri-run:
 
 testbench_verilator: CV_CORE_pkg $(TBSRC_VERI) $(TBSRC_PKG)
 	@echo "$(BANNER)"
-	@echo "* Compiling CORE TB and CV32E40P with Verilator"
+	@echo "* Compiling CORE TB and CV32E40PX with Verilator"
 	@echo "$(BANNER)"
 	$(VERILATOR) --cc --sv --exe \
 		$(VERI_TRACE) \

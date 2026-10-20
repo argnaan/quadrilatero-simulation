@@ -8,14 +8,14 @@
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the
 // specific language governing permissions and limitations under the License.
 
-// Wrapper for a CV32E40P testbench, containing CV32E40P, Memory and stdout peripheral
+// Wrapper for a CV32E40PX testbench, containing CV32E40PX, Memory and stdout peripheral
 // Contributor: Robert Balas <balasr@student.ethz.ch>
 // Module renamed from riscv_wrapper to cv32e40p_tb_wrapper because (1) the
 // name of the core changed, and (2) the design has a cv32e40p_wrapper module.
 //
 // SPDX-License-Identifier: Apache-2.0 WITH SHL-0.51
 
-module cv32e40p_core_tb_wrapper
+module cv32e40px_core_tb_wrapper
   import cv32e40px_core_v_xif_pkg::*;
   import obi_pkg::*;
     #(parameter // Parameters used by TB
@@ -29,7 +29,8 @@ module cv32e40p_core_tb_wrapper
                 COREV_CLUSTER     = 0,
                 FPU               = 0,
                 ZFINX             = 0,
-                NUM_MHPMCOUNTERS  = 1
+                NUM_MHPMCOUNTERS  = 1,
+                QUAD_INST_FIFO_DEPTH = 4
     )
     (
      input logic         clk_i,
@@ -266,9 +267,23 @@ module cv32e40p_core_tb_wrapper
          .exit_value_o   ( exit_value_o                              ));
 
     
+    // Adapt Issue interface which is different (N_RS=3 in Corem, =2 in Quadrilatero)
+    xif_pkg::x_issue_req_t        q_issue_req;
+    always_comb begin
+        q_issue_req           = '0;
+        q_issue_req.instr     = x_issue_req.instr;
+        q_issue_req.mode      = x_issue_req.mode;
+        q_issue_req.id        = x_issue_req.id;
+        q_issue_req.rs        = x_issue_req.rs[xif_pkg::X_NUM_RS-1:0];
+        q_issue_req.rs_valid  = x_issue_req.rs_valid[xif_pkg::X_NUM_RS-1:0];
+        q_issue_req.ecs       = x_issue_req.ecs;
+        q_issue_req.ecs_valid = x_issue_req.ecs_valid;
+    end
 
     // Quadrilatero
-    quadrilatero quad_i
+    quadrilatero #(
+        .INPUT_BUFFER_DEPTH ( QUAD_INST_FIFO_DEPTH )
+    ) quad_i
     (
         .clk_i          ( clk_i ),
         .rst_ni         ( rst_ni ),
@@ -293,7 +308,7 @@ module cv32e40p_core_tb_wrapper
         // issue interface
         .x_issue_valid_i        ( x_issue_valid      ),
         .x_issue_ready_o        ( x_issue_ready      ),
-        .x_issue_req_i          ( x_issue_req        ),
+        .x_issue_req_i          ( q_issue_req         ),
         .x_issue_resp_o         ( x_issue_resp       ),
 
         // commit interface
