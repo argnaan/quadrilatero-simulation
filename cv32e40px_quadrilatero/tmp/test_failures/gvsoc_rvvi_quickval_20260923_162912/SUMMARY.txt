@@ -1,0 +1,11 @@
+quick_val start: 2026-09-23T16:29:12+02:00
+reference core: iss_v2
+configs: default
+seed: 1
+=== CFG=default compile ===
+comp rc=2 wall=3s
+COMP_FAIL default - lane skipped (see default/comp.log)
+=== TOTAL: 0 PASS / 1 FAIL / 0 KNOWN_FAIL / 0 SKIP ===
+--- non-PASS (known-fail and skips excluded):
+COMP_FAIL default - lane skipped (see default/comp.log)
+quick_val end: 2026-09-23T16:29:15+02:00

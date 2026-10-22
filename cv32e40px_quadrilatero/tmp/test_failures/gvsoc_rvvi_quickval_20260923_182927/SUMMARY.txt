@@ -1,0 +1,100 @@
+quick_val start: 2026-09-23T18:29:27+02:00
+reference core: iss_v2
+configs: pulp
+seed: 1
+=== CFG=pulp compile ===
+comp rc=0 wall=21s
+pulp/corev_rand_pulp_hwloop_test PASS rc=0 wall=11s mismatches=na
+pulp/corev_rand_pulp_instr_test PASS rc=0 wall=14s mismatches=na
+pulp/corev_rand_pulp_simd_instr_test PASS rc=0 wall=12s mismatches=na
+pulp/corev_rand_pulp_mac_instr_test PASS rc=0 wall=12s mismatches=na
+pulp/corev_rand_pulp_hwloop_exception PASS rc=0 wall=18s mismatches=na
+pulp/corev_rand_pulp_illegal_instr_test PASS rc=0 wall=14s mismatches=na
+pulp/corev_rand_pulp_hwloop_illegal_instr_test PASS rc=0 wall=11s mismatches=na
+pulp/corev_rand_pulp_with_priv_instr_test PASS rc=0 wall=22s mismatches=na
+pulp/corev_rand_pulp_instr_interrupt_test PASS rc=0 wall=13s mismatches=na
+pulp/corev_rand_pulp_hwloop_interrupt_test PASS rc=0 wall=11s mismatches=na
+pulp/corev_directed_pulp_hwloop_test_with_interrupt PASS rc=0 wall=54s mismatches=na
+pulp/corev_rand_pulp_hwloop_count_range_test PASS rc=0 wall=25s mismatches=na
+pulp/tb_hack_obi_gnt_stalls PASS rc=0 wall=14s mismatches=na
+pulp/pulp_hardware_loop PASS rc=0 wall=11s mismatches=na
+pulp/pulp_hardware_loop_interrupt_test PASS rc=0 wall=7s mismatches=na
+pulp/pulp_hardware_loop_debug_test PASS rc=0 wall=21s mismatches=na
+pulp/debug_hwloop_test PASS rc=0 wall=9s mismatches=na
+pulp/custom_opcode_illegal_test PASS rc=0 wall=31s mismatches=na
+pulp/cv32e40pv2_illegal_ro_csr_access_test PASS rc=0 wall=10s mismatches=na
+pulp/cv32e40p_csr_access_test PASS rc=0 wall=29s mismatches=na
+pulp/all_csr_por PASS rc=0 wall=1969s mismatches=na
+pulp/load_store_rs1_zero PASS rc=0 wall=4s mismatches=na
+pulp/jalr_test FAIL rc=2 wall=5s mismatches=na
+pulp/pulp_bit_manipulation PASS rc=0 wall=6s mismatches=na
+pulp/pulp_general_alu PASS rc=0 wall=5s mismatches=na
+pulp/pulp_immediate_branching PASS rc=0 wall=6s mismatches=na
+pulp/pulp_multiply_accumulate PASS rc=0 wall=5s mismatches=na
+pulp/pulp_post_increment_load_store PASS rc=0 wall=6s mismatches=na
+pulp/pulp_vectorial_add_sub PASS rc=0 wall=6s mismatches=na
+pulp/pulp_vectorial_avg PASS rc=0 wall=6s mismatches=na
+pulp/pulp_vectorial_bit_manip PASS rc=0 wall=6s mismatches=na
+pulp/pulp_vectorial_bitwise PASS rc=0 wall=6s mismatches=na
+pulp/pulp_vectorial_comparison_1 PASS rc=0 wall=6s mismatches=na
+pulp/pulp_vectorial_comparison_2 PASS rc=0 wall=6s mismatches=na
+pulp/pulp_vectorial_comparison_3 PASS rc=0 wall=5s mismatches=na
+pulp/pulp_vectorial_complex PASS rc=0 wall=7s mismatches=na
+pulp/pulp_vectorial_dot_product_1 PASS rc=0 wall=5s mismatches=na
+pulp/pulp_vectorial_dot_product_2 PASS rc=0 wall=6s mismatches=na
+pulp/pulp_vectorial_max PASS rc=0 wall=6s mismatches=na
+pulp/pulp_vectorial_min PASS rc=0 wall=6s mismatches=na
+pulp/pulp_vectorial_shift PASS rc=0 wall=5s mismatches=na
+pulp/pulp_vectorial_shuffle_pack PASS rc=0 wall=6s mismatches=na
+pulp/corev_directed_pulp_hwloop_debug PASS rc=0 wall=60s mismatches=na
+pulp/corev_directed_pulp_hwloop_debug_ebreak PASS rc=0 wall=101s mismatches=na
+pulp/corev_directed_pulp_hwloop_debug_single_step PASS rc=0 wall=62s mismatches=na
+pulp/corev_directed_pulp_hwloop_debug_trigger PASS rc=0 wall=59s mismatches=na
+pulp/corev_directed_pulp_hwloop_debug_trigger_with_ebreak PASS rc=0 wall=108s mismatches=na
+pulp/corev_directed_pulp_hwloop_debug_trigger_with_single_step PASS rc=0 wall=63s mismatches=na
+pulp/corev_directed_pulp_hwloop_debug_with_int_debug_ebreak PASS rc=0 wall=110s mismatches=na
+pulp/corev_directed_pulp_hwloop_debug_with_int_debug_trigger PASS rc=0 wall=63s mismatches=na
+pulp/corev_directed_pulp_hwloop_debug_with_int_debug_trigger_and_ebreak PASS rc=0 wall=113s mismatches=na
+pulp/corev_directed_pulp_hwloop_debug_with_int_debug_trigger_single_step PASS rc=0 wall=65s mismatches=na
+pulp/corev_directed_pulp_hwloop_debug_with_interrupt PASS rc=0 wall=62s mismatches=na
+pulp/corev_directed_pulp_hwloop_test_with_random_debug PASS rc=0 wall=52s mismatches=na
+pulp/corev_rand_debug_ebreak_xpulp PASS rc=0 wall=18s mismatches=na
+pulp/corev_rand_debug_single_step_xpulp PASS rc=0 wall=15s mismatches=na
+pulp/corev_rand_pulp_hwloop_debug PASS rc=0 wall=13s mismatches=na
+pulp/corev_rand_pulp_hwloop_debug_ebreak PASS rc=0 wall=24s mismatches=na
+pulp/corev_rand_pulp_hwloop_debug_single_step PASS rc=0 wall=16s mismatches=na
+pulp/corev_rand_pulp_hwloop_debug_trigger PASS rc=0 wall=14s mismatches=na
+pulp/corev_rand_pulp_hwloop_debug_trigger_with_ebreak PASS rc=0 wall=26s mismatches=na
+pulp/corev_rand_pulp_hwloop_debug_trigger_with_single_step PASS rc=0 wall=16s mismatches=na
+pulp/corev_rand_pulp_hwloop_debug_with_int_debug_ebreak PASS rc=0 wall=27s mismatches=na
+pulp/corev_rand_pulp_hwloop_debug_with_int_debug_trigger PASS rc=0 wall=13s mismatches=na
+pulp/corev_rand_pulp_hwloop_debug_with_int_debug_trigger_and_ebreak PASS rc=0 wall=27s mismatches=na
+pulp/corev_rand_pulp_hwloop_debug_with_int_debug_trigger_single_step PASS rc=0 wall=16s mismatches=na
+pulp/corev_rand_pulp_hwloop_debug_with_interrupt PASS rc=0 wall=12s mismatches=na
+pulp/corev_rand_pulp_hwloop_exception_debug_trigger PASS rc=0 wall=16s mismatches=na
+pulp/corev_rand_pulp_hwloop_exception_single_step_debug PASS rc=0 wall=12s mismatches=na
+pulp/corev_rand_pulp_hwloop_exception_with_int_debug_trigger PASS rc=0 wall=15s mismatches=na
+pulp/corev_rand_pulp_hwloop_in_debug_rom PASS rc=0 wall=12s mismatches=na
+pulp/corev_rand_pulp_hwloop_test_with_random_debug PASS rc=0 wall=12s mismatches=na
+pulp/corev_rand_pulp_instr_debug_ebreak_with_random_debug_req PASS rc=0 wall=15s mismatches=na
+pulp/corev_rand_pulp_instr_debug_single_step_with_random_debug_req PASS rc=0 wall=31s mismatches=na
+pulp/corev_rand_pulp_instr_debug_test_with_int_and_debug_ebreak PASS rc=0 wall=17s mismatches=na
+pulp/corev_rand_pulp_instr_debug_test_with_int_and_debug_single_step PASS rc=0 wall=17s mismatches=na
+pulp/corev_rand_pulp_instr_debug_test_with_int_and_debug_trigger PASS rc=0 wall=15s mismatches=na
+pulp/corev_rand_pulp_instr_debug_test_with_int_debug_trigger_and_ebreak PASS rc=0 wall=23s mismatches=na
+pulp/corev_rand_pulp_instr_debug_test_with_int_debug_trigger_and_single_step PASS rc=0 wall=17s mismatches=na
+pulp/corev_rand_pulp_instr_debug_trigger_test PASS rc=0 wall=14s mismatches=na
+pulp/corev_rand_pulp_instr_debug_trigger_with_ebreak PASS rc=0 wall=21s mismatches=na
+pulp/corev_rand_pulp_instr_debug_trigger_with_random_debug_req PASS rc=0 wall=16s mismatches=na
+pulp/corev_rand_pulp_instr_debug_trigger_with_single_step PASS rc=0 wall=18s mismatches=na
+pulp/corev_rand_pulp_instr_ebreak_debug_test PASS rc=0 wall=17s mismatches=na
+pulp/corev_rand_pulp_instr_interrupt_debug_test PASS rc=0 wall=12s mismatches=na
+pulp/corev_rand_pulp_instr_random_debug_test PASS rc=0 wall=12s mismatches=na
+pulp/corev_rand_pulp_instr_single_step_debug_test PASS rc=0 wall=17s mismatches=na
+pulp/corev_directed_for_hwloop_covg_test PASS rc=0 wall=15s mismatches=na
+pulp/corev_rand_pulp_instr_test_debug_ebreak PASS rc=0 wall=17s mismatches=na
+pulp/corev_rand_pulp_instr_test_debug_single_step PASS rc=0 wall=14s mismatches=na
+=== TOTAL: 89 PASS / 1 FAIL / 0 KNOWN_FAIL / 0 SKIP ===
+--- non-PASS (known-fail and skips excluded):
+pulp/jalr_test FAIL rc=2 wall=5s mismatches=na
+quick_val end: 2026-09-23T19:35:56+02:00

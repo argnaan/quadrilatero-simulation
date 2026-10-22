@@ -59,12 +59,12 @@ SIMULATOR      ?= $(CV_SIMULATOR)
 VSIM_FLAGS       ?=+rand_stall_obi_disable
 
 # Default "custom test-program"
-CUSTOM_PROG  ?= matmul
-TEST         ?= matmul
+CUSTOM_PROG  ?= matmul_quadrilatero
+TEST         ?= matmul_quadrilatero
 
 # Toolchain and compiler settings
 CV_SW_MARCH    ?= rv32imc_xtheadmatrix0p1      
-CV_SW_TOOLCHAIN ?= /srv/home/andrea.argnani5/tesi/my_toolchain
+CV_SW_TOOLCHAIN ?= ~/tesi/toolchain_quadrilatero
 CV_SW_PREFIX 	?= riscv64-unknown-elf-
 CV_SW_MARCH 	?= rv32imc_xtheadmatrix0p1
 
@@ -199,7 +199,6 @@ TBSRC       := $(TBSRC_CORE)/tb_top.sv \
                $(TBSRC_CORE)/cv32e40px_core_tb_wrapper.sv \
                $(TBSRC_CORE)/mm_ram.sv \
                $(TBSRC_CORE)/dp_ram.sv \
-			   $(TBSRC_CORE)/tb_mem_arb.sv \
                $(TBSRC_CORE)/tb_riscv/riscv_random_stall.sv \
                $(TBSRC_CORE)/tb_riscv/riscv_random_interrupt_generator.sv \
                $(TBSRC_CORE)/tb_riscv/riscv_rvalid_stall.sv \
@@ -711,11 +710,9 @@ clone_$(CV_CORE_LC)_rtl:
 	@echo "$(BANNER)"
 	@echo "* Cloning CV32E40PX RTL model and Quadrilatero RTL"
 	@echo "$(BANNER)"
-	$(CLONE_CV_CORE_CMD)
-	mkdir -p $(CORE_V_VERIF)/core-v-cores/quadrilatero
-	git clone $(QUADRILATERO_REPO) $(QUADRILATERO_DIR)
-	cd $(QUADRILATERO_DIR) && bender update && bender script flist-plus > $(QUADRILATERO_MANIFEST)
-
+	[ -d $(CV_CORE_PKG)/.git ] || $(CLONE_CV_CORE_CMD)
+	[ -d $(QUADRILATERO_DIR)/.git ] || git clone $(QUADRILATERO_REPO) $(QUADRILATERO_DIR)
+	cd $(QUADRILATERO_DIR) && git checkout $(QUADRILATERO_REV) && bender update && bender script flist-plus > $(QUADRILATERO_MANIFEST)
 
 
 

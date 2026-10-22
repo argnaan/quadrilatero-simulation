@@ -8,7 +8,7 @@
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the
 // specific language governing permissions and limitations under the License.
 
-// Wrapper for a CV32E40PX testbench, containing CV32E40PX, Memory and stdout peripheral
+// Wrapper for a CV32E40P testbench, containing CV32E40P, Memory and stdout peripheral
 // Contributor: Robert Balas <balasr@student.ethz.ch>
 // Module renamed from riscv_wrapper to cv32e40p_tb_wrapper because (1) the
 // name of the core changed, and (2) the design has a cv32e40p_wrapper module.
@@ -17,7 +17,7 @@
 
 module cv32e40px_core_tb_wrapper
   import cv32e40px_core_v_xif_pkg::*;
-  import obi_pkg::*;
+  import quadrilatero_pkg::*;
     #(parameter // Parameters used by TB
                 INSTR_RDATA_WIDTH = 32,
                 RAM_ADDR_WIDTH    = 20,
@@ -29,8 +29,7 @@ module cv32e40px_core_tb_wrapper
                 COREV_CLUSTER     = 0,
                 FPU               = 0,
                 ZFINX             = 0,
-                NUM_MHPMCOUNTERS  = 1,
-                QUAD_INST_FIFO_DEPTH = 4
+                NUM_MHPMCOUNTERS  = 1
     )
     (
      input logic         clk_i,
@@ -43,6 +42,12 @@ module cv32e40px_core_tb_wrapper
      output logic        exit_valid_o
     );
 
+    localparam int unsigned LSU_PORTS = quadrilatero_pkg::LSU_PORTS;
+    localparam int unsigned MEM_PORTS = quadrilatero_pkg::LLEN / LSU_PORTS / quadrilatero_pkg::DATA_WIDTH;
+    localparam int unsigned QUAD_N_PORTS = LSU_PORTS * MEM_PORTS;
+
+
+
     // signals connecting core 
     logic                         instr_req;
     logic                         instr_gnt;
@@ -50,24 +55,14 @@ module cv32e40px_core_tb_wrapper
     logic [31:0]                  instr_addr;
     logic [INSTR_RDATA_WIDTH-1:0] instr_rdata;
 
-    logic                         core_data_req;
-    logic                         core_data_gnt;
-    logic                         core_data_rvalid;
-    logic [31:0]                  core_data_addr;
-    logic                         core_data_we;
-    logic [3:0]                   core_data_be;
-    logic [31:0]                  core_data_rdata;
-    logic [31:0]                  core_data_wdata;
-
-    // signals to memory
-    logic                        mem_req;
-    logic                        mem_gnt;
-    logic                        mem_rvalid;
-    logic [31:0]                 mem_addr;
-    logic                        mem_we;
-    logic [3:0]                  mem_be;
-    logic [31:0]                 mem_rdata;
-    logic [31:0]                 mem_wdata;
+    logic                         data_req;
+    logic                         data_gnt;
+    logic                         data_rvalid;
+    logic [31:0]                  data_addr;
+    logic                         data_we;
+    logic [3:0]                   data_be;
+    logic [31:0]                  data_rdata;
+    logic [31:0]                  data_wdata;
 
     // signals to debug unit
     logic                         debug_req;
@@ -106,17 +101,23 @@ module cv32e40px_core_tb_wrapper
     logic                         x_result_ready;
     x_result_t                    x_result;
 
+    // signals for the Quadrilatero memory interface
+    logic [LSU_PORTS-1:0][MEM_PORTS-1:0]        quad_req;
+    logic [LSU_PORTS-1:0][MEM_PORTS-1:0]        quad_we;
+    logic [LSU_PORTS-1:0][MEM_PORTS-1:0][3:0]   quad_be;
+    logic [LSU_PORTS-1:0][MEM_PORTS-1:0][31:0]  quad_addr;
+    logic [LSU_PORTS-1:0][MEM_PORTS-1:0][31:0]  quad_wdata;
+    logic [LSU_PORTS-1:0][MEM_PORTS-1:0]        quad_gnt;
+    logic [LSU_PORTS-1:0][MEM_PORTS-1:0]        quad_rvalid;
+    logic [LSU_PORTS-1:0][MEM_PORTS-1:0][31:0]  quad_rdata;
 
+    logic [QUAD_N_PORTS-1:0][RAM_ADDR_WIDTH-1:0]  quad_addr_ram;
 
-    // Quadrilatero to bridge interface
-    logic                                         q_mem_req, q_mem_we, q_mem_gnt, q_mem_rvalid;
-    logic [quadrilatero_pkg::BUS_WIDTH/8-1:0]     q_mem_be;
-    logic [31:0]                                  q_mem_addr;
-    logic [quadrilatero_pkg::BUS_WIDTH-1:0]       q_mem_wdata, q_mem_rdata;
-
-    // Quadrilatero obi channels
-    obi_req_t  quad_req  [4];
-    obi_resp_t quad_resp [4];
+    always_comb begin
+        for (int i = 0; i < LSU_PORTS; i++)
+            for (int j = 0; j < MEM_PORTS; j++)
+                quad_addr_ram[i*MEM_PORTS+j] = quad_addr[i][j][RAM_ADDR_WIDTH-1:0];
+    end
 
     // interrupts (only timer for now)
     assign irq_sec     = '0;
@@ -165,14 +166,14 @@ module cv32e40px_core_tb_wrapper
          .instr_addr_o           ( instr_addr            ),
          .instr_rdata_i          ( instr_rdata           ),
 
-         .data_req_o             ( core_data_req         ),
-         .data_gnt_i             ( core_data_gnt         ),
-         .data_rvalid_i          ( core_data_rvalid      ),
-         .data_we_o              ( core_data_we          ),
-         .data_be_o              ( core_data_be          ),
-         .data_addr_o            ( core_data_addr        ),
-         .data_wdata_o           ( core_data_wdata       ),
-         .data_rdata_i           ( core_data_rdata       ),
+         .data_req_o             ( data_req         ),
+         .data_gnt_i             ( data_gnt         ),
+         .data_rvalid_i          ( data_rvalid      ),
+         .data_we_o              ( data_we          ),
+         .data_be_o              ( data_be          ),
+         .data_addr_o            ( data_addr        ),
+         .data_wdata_o           ( data_wdata       ),
+         .data_rdata_i           ( data_rdata       ),
 
          .apu_req_o              (                       ),
          .apu_gnt_i              ( 1'b0                  ),
@@ -230,7 +231,8 @@ module cv32e40px_core_tb_wrapper
     // this handles read to RAM and memory mapped pseudo peripherals
     mm_ram
         #(.RAM_ADDR_WIDTH (RAM_ADDR_WIDTH),
-          .INSTR_RDATA_WIDTH (INSTR_RDATA_WIDTH))
+          .INSTR_RDATA_WIDTH (INSTR_RDATA_WIDTH),
+          .QUAD_N_PORTS(QUAD_N_PORTS))
     ram_i
         (.clk_i          ( clk_i                                     ),
          .rst_ni         ( rst_ni                                    ),
@@ -244,14 +246,24 @@ module cv32e40px_core_tb_wrapper
          .instr_rvalid_o ( instr_rvalid                              ),
          .instr_gnt_o    ( instr_gnt                                 ),
 
-         .data_req_i     ( mem_req                                  ),
-         .data_addr_i    ( mem_addr                                 ),
-         .data_we_i      ( mem_we                                   ),
-         .data_be_i      ( mem_be                                   ),
-         .data_wdata_i   ( mem_wdata                                ),
-         .data_rdata_o   ( mem_rdata                                ),
-         .data_rvalid_o  ( mem_rvalid                               ),
-         .data_gnt_o     ( mem_gnt                                  ),
+         .data_req_i     ( data_req                             ),
+         .data_addr_i    ( data_addr                            ),
+         .data_we_i      ( data_we                              ),
+         .data_be_i      ( data_be                              ),
+         .data_wdata_i   ( data_wdata                           ),
+         .data_rdata_o   ( data_rdata                           ),
+         .data_rvalid_o  ( data_rvalid                          ),
+         .data_gnt_o     ( data_gnt                             ),
+
+         .quad_req_i      ( quad_req                                 ),
+         .quad_we_i       ( quad_we                                  ),
+         .quad_be_i       ( quad_be                                  ),
+         .quad_addr_i     ( quad_addr                                ),
+         .quad_wdata_i    ( quad_wdata                               ),
+         .quad_gnt_o      ( quad_gnt                                 ),
+         .quad_rvalid_o   ( quad_rvalid                              ),
+         .quad_rdata_o    ( quad_rdata                               ),
+
 
          .irq_id_i       ( irq_id_out                                ),
          .irq_ack_i      ( irq_ack                                   ),
@@ -267,37 +279,23 @@ module cv32e40px_core_tb_wrapper
          .exit_value_o   ( exit_value_o                              ));
 
     
-    // Adapt Issue interface which is different (N_RS=3 in Corem, =2 in Quadrilatero)
-    xif_pkg::x_issue_req_t        q_issue_req;
-    always_comb begin
-        q_issue_req           = '0;
-        q_issue_req.instr     = x_issue_req.instr;
-        q_issue_req.mode      = x_issue_req.mode;
-        q_issue_req.id        = x_issue_req.id;
-        q_issue_req.rs        = x_issue_req.rs[xif_pkg::X_NUM_RS-1:0];
-        q_issue_req.rs_valid  = x_issue_req.rs_valid[xif_pkg::X_NUM_RS-1:0];
-        q_issue_req.ecs       = x_issue_req.ecs;
-        q_issue_req.ecs_valid = x_issue_req.ecs_valid;
-    end
 
     // Quadrilatero
-    quadrilatero #(
-        .INPUT_BUFFER_DEPTH ( QUAD_INST_FIFO_DEPTH )
-    ) quad_i
+    quadrilatero quad_i
     (
         .clk_i          ( clk_i ),
         .rst_ni         ( rst_ni ),
 
         // memory interface
-        .mem_req_o              ( q_mem_req     ), 
-        .mem_we_o               ( q_mem_we      ), 
-        .mem_be_o               ( q_mem_be      ),
-        .mem_addr_o             ( q_mem_addr    ), 
-        .mem_wdata_o            ( q_mem_wdata   ),
-        .mem_gnt_i              ( q_mem_gnt     ), 
-        .mem_rvalid_i           ( q_mem_rvalid  ), 
-        .mem_rdata_i            ( q_mem_rdata   ),
-        
+        .mem_req_o      ( quad_req     ),
+        .mem_we_o       ( quad_we      ),
+        .mem_gnt_i      ( quad_gnt     ),
+        .mem_rvalid_i   ( quad_rvalid  ),
+        .mem_be_o       ( quad_be      ),
+        .mem_addr_o     ( quad_addr    ),
+        .mem_wdata_o    ( quad_wdata   ),
+        .mem_rdata_i    ( quad_rdata   ),
+
         // XIF interface
         // compressed interface
         .x_compressed_valid_i   ( x_compressed_valid ),
@@ -308,7 +306,7 @@ module cv32e40px_core_tb_wrapper
         // issue interface
         .x_issue_valid_i        ( x_issue_valid      ),
         .x_issue_ready_o        ( x_issue_ready      ),
-        .x_issue_req_i          ( q_issue_req         ),
+        .x_issue_req_i          ( x_issue_req        ),
         .x_issue_resp_o         ( x_issue_resp       ),
 
         // commit interface
@@ -331,72 +329,5 @@ module cv32e40px_core_tb_wrapper
         .x_result_o             ( x_result           )
     );
 
-    quadrilatero_to_obi bridge_i (
-        .clk_i      ( clk_i ),
-        .rst_ni     ( rst_ni ),
-        
-        .mem_req_i      ( q_mem_req     ), 
-        .mem_we_i       ( q_mem_we      ), 
-        .mem_be_i       ( q_mem_be      ),
-        .mem_addr_i     ( q_mem_addr    ), 
-        .mem_wdata_i    ( q_mem_wdata   ),
-        .mem_gnt_o      ( q_mem_gnt     ), 
-        .mem_rvalid_o   ( q_mem_rvalid  ), 
-        .mem_rdata_o    ( q_mem_rdata   ),
-  
-        .quadrilatero_ch0_req_o ( quad_req[0]   ), 
-        .quadrilatero_ch0_resp_i( quad_resp[0]  ),
-        .quadrilatero_ch1_req_o ( quad_req[1]   ), 
-        .quadrilatero_ch1_resp_i( quad_resp[1]  ),
-        .quadrilatero_ch2_req_o ( quad_req[2]   ), 
-        .quadrilatero_ch2_resp_i( quad_resp[2]  ),
-        .quadrilatero_ch3_req_o ( quad_req[3]   ), 
-        .quadrilatero_ch3_resp_i( quad_resp[3]  )
-);
-
-
-    logic [4:0]       m_req, m_gnt, m_rvalid, m_we;
-    logic [4:0][31:0] m_addr, m_wdata;
-    logic [4:0][3:0]  m_be;
-    logic [31:0]      arb_rdata;
-
-    assign m_req[0]   = core_data_req;   assign m_we[0]    = core_data_we;
-    assign m_addr[0]  = core_data_addr;  assign m_be[0]    = core_data_be;
-    assign m_wdata[0] = core_data_wdata;
-    assign core_data_gnt    = m_gnt[0];
-    assign core_data_rvalid = m_rvalid[0];
-    assign core_data_rdata  = arb_rdata;
-
-    for (genvar i = 0; i < 4; i++) begin : g_quad
-        assign m_req[i+1]   = quad_req[i].req;
-        assign m_we[i+1]    = quad_req[i].we;
-        assign m_be[i+1]    = quad_req[i].be;
-        assign m_addr[i+1]  = quad_req[i].addr;
-        assign m_wdata[i+1] = quad_req[i].wdata;
-        assign quad_resp[i] = '{gnt: m_gnt[i+1], rvalid: m_rvalid[i+1], rdata: arb_rdata};
-    end
-
-    tb_mem_arb #(.N(5)) mem_arb_i (
-      .clk(clk_i), 
-      .rst_n(rst_ni),
-      
-      .m_req    ( m_req     ), 
-      .m_gnt    ( m_gnt     ), 
-      .m_rvalid ( m_rvalid  ),
-      .m_addr   ( m_addr    ), 
-      .m_we     ( m_we      ), 
-      .m_be     ( m_be      ), 
-      .m_wdata  ( m_wdata   ), 
-      .m_rdata  ( arb_rdata ),
-       
-      .s_req    ( mem_req   ), 
-      .s_gnt    ( mem_gnt   ), 
-      .s_rvalid ( mem_rvalid),
-      .s_addr   ( mem_addr  ), 
-      .s_we     ( mem_we    ), 
-      .s_be     ( mem_be    ), 
-      .s_wdata  ( mem_wdata ), 
-      .s_rdata  ( mem_rdata )
-    );
 
 endmodule // cv32e40p_core_tb_wrapper

@@ -29,7 +29,8 @@ module mm_ram
                DATA_RDATA_WIDTH  =  32, // width of read_data on data bus
                DBG_ADDR_WIDTH    =  14, // POT ammount of memory allocated for debugger
                                         // physically located at end of memory
-               IRQ_WIDTH         =  32  // IRQ vector width
+               IRQ_WIDTH         =  32,  // IRQ vector width
+               QUAD_N_PORTS      =  4
   )
   (
      input logic                          clk_i,
@@ -50,6 +51,15 @@ module mm_ram
      output logic [31:0]                  data_rdata_o,
      output logic                         data_rvalid_o,
      output logic                         data_gnt_o,
+     
+     input logic [QUAD_N_PORTS-1:0]        quad_req_i,
+     input logic [QUAD_N_PORTS-1:0][31:0]  quad_addr_i,
+     input logic [QUAD_N_PORTS-1:0]        quad_we_i,
+     input logic [QUAD_N_PORTS-1:0][3:0]   quad_be_i,
+     input logic [QUAD_N_PORTS-1:0][31:0]  quad_wdata_i,
+     output logic [QUAD_N_PORTS-1:0][31:0] quad_rdata_o,
+     output logic [QUAD_N_PORTS-1:0]       quad_rvalid_o,
+     output logic [QUAD_N_PORTS-1:0]       quad_gnt_o,
 
      input logic [4:0]                    irq_id_i,
      input logic                          irq_ack_i,
@@ -668,7 +678,8 @@ module mm_ram
     // instantiate the ram
     dp_ram
         #(.ADDR_WIDTH (RAM_ADDR_WIDTH),
-          .INSTR_RDATA_WIDTH(INSTR_RDATA_WIDTH))
+          .INSTR_RDATA_WIDTH(INSTR_RDATA_WIDTH),
+          .QUAD_N_PORTS(QUAD_N_PORTS))
     dp_ram_i
         (
          .clk_i     ( clk_i           ),
@@ -685,7 +696,15 @@ module mm_ram
          .wdata_b_i ( ram_data_wdata  ),
          .rdata_b_o ( ram_data_rdata  ),
          .we_b_i    ( ram_data_we     ),
-         .be_b_i    ( ram_data_be     ));
+         .be_b_i    ( ram_data_be     ),
+         
+         .en_quad_i    ( quad_req_i    ),
+         .addr_quad_i  ( quad_addr_i   ),
+         .wdata_quad_i ( quad_wdata_i  ),
+         .rdata_quad_o ( quad_rdata_o  ),
+         .we_quad_i    ( quad_we_i     ),
+         .be_quad_i    ( quad_be_i     )
+         );
 
     riscv_rvalid_stall instr_rvalid_stall_i (
         .clk_i      ( clk_i           ),
@@ -835,6 +854,17 @@ module mm_ram
       .irq_pc_trig_i     ( rnd_stall_regs[13]                           )
     );
 `endif
+
+    // Handshake OBI with 0-stall 
+    assign quad_gnt_o = quad_req_i; // immediate grant
+
+    always_ff @(posedge clk_i, negedge rst_ni) begin
+        if (!rst_ni) begin
+            quad_rvalid_o <= '0;
+        end else begin
+            quad_rvalid_o <= quad_req_i & quad_gnt_o;
+        end
+    end
 
 endmodule // ram
 

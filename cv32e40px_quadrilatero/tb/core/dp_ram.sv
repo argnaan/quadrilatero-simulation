@@ -14,7 +14,9 @@
 
 module dp_ram
     #(parameter ADDR_WIDTH = 8,
-      parameter INSTR_RDATA_WIDTH = 128)
+      parameter INSTR_RDATA_WIDTH = 128,
+      parameter QUAD_N_PORTS = 4
+    )
     (input logic                  clk_i,
 
      input logic                          en_a_i,
@@ -29,20 +31,52 @@ module dp_ram
      input logic [31:0]                   wdata_b_i,
      output logic [31:0]                  rdata_b_o,
      input logic                          we_b_i,
-     input logic [3:0]                    be_b_i);
+     input logic [3:0]                    be_b_i,
+     
+     input logic [QUAD_N_PORTS-1:0]                 en_quad_i,
+     input logic [QUAD_N_PORTS-1:0][ADDR_WIDTH-1:0] addr_quad_i,
+     input logic [QUAD_N_PORTS-1:0][31:0]           wdata_quad_i,
+     output logic [QUAD_N_PORTS-1:0][31:0]          rdata_quad_o,
+     input logic [QUAD_N_PORTS-1:0]                 we_quad_i,
+     input logic [QUAD_N_PORTS-1:0][3:0]            be_quad_i
+    );
 
     localparam bytes = 2**ADDR_WIDTH;
 
     logic [7:0]                      mem[bytes];
     logic [ADDR_WIDTH-1:0]           addr_a_int;
     logic [ADDR_WIDTH-1:0]           addr_b_int;
+    logic [QUAD_N_PORTS-1:0][ADDR_WIDTH-1:0] addr_quad_int;
 
     always_comb addr_a_int = {addr_a_i[ADDR_WIDTH-1:2], 2'b0};
     always_comb addr_b_int = {addr_b_i[ADDR_WIDTH-1:2], 2'b0};
+    
+    for(genvar i = 0; i < QUAD_N_PORTS; i++) begin: g_quad_addr
+        always_comb addr_quad_int[i] = {addr_quad_i[i][ADDR_WIDTH-1:2], 2'b0};
+    end
 
     always @(posedge clk_i) begin
         for (int i = 0; i < INSTR_RDATA_WIDTH/8; i++) begin
             rdata_a_o[(i*8)+: 8] <= mem[addr_a_int +  i];
+        end
+
+        for(int i = 0; i < QUAD_N_PORTS; i++) begin
+            if (en_quad_i[i]) begin
+                /* handle writes */
+                if (we_quad_i[i]) begin
+                    if (be_quad_i[i][0]) mem[addr_quad_int[i]    ] <= wdata_quad_i[i][ 0+:8];
+                    if (be_quad_i[i][1]) mem[addr_quad_int[i] + 1] <= wdata_quad_i[i][ 8+:8];
+                    if (be_quad_i[i][2]) mem[addr_quad_int[i] + 2] <= wdata_quad_i[i][16+:8];
+                    if (be_quad_i[i][3]) mem[addr_quad_int[i] + 3] <= wdata_quad_i[i][24+:8];
+                end
+                /* handle reads */
+                else begin
+                    rdata_quad_o[i][ 7: 0] <= mem[addr_quad_int[i]    ];
+                    rdata_quad_o[i][15: 8] <= mem[addr_quad_int[i] + 1];
+                    rdata_quad_o[i][23:16] <= mem[addr_quad_int[i] + 2];
+                    rdata_quad_o[i][31:24] <= mem[addr_quad_int[i] + 3];
+                end
+            end
         end
 
         /* addr_b_i is the actual memory address referenced */
@@ -67,6 +101,16 @@ module dp_ram
                 rdata_b_o[31:24] <= mem[addr_b_int + 3];
             end
         end
+    end
+
+    // check for double writes on same word (core vs quad, quad vs quad)
+    always @(posedge clk_i)
+    for (int i = 0; i < QUAD_N_PORTS; i++) begin
+      if (en_quad_i[i] && we_quad_i[i] && en_b_i && we_b_i && addr_quad_int[i] == addr_b_int)
+        $error("double write core/quad%0d @0x%08x", i, addr_b_int);
+      for (int j = i+1; j < QUAD_N_PORTS; j++)
+        if (en_quad_i[i] && we_quad_i[i] && en_quad_i[j] && we_quad_i[j] && addr_quad_int[i] == addr_quad_int[j])
+          $error("double write quad%0d/quad%0d @0x%08x", i, j, addr_quad_int[i]);
     end
 
     export "DPI-C" function read_byte;

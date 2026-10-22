@@ -1,0 +1,6 @@
+make.cmd
+*.log
+*.txt
+vsim_results/
+xrun_results/
+transcript

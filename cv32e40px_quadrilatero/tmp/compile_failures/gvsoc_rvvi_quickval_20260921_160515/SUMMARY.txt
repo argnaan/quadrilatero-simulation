@@ -1,0 +1,74 @@
+quick_val start: 2026-09-21T16:05:15+02:00
+reference core: iss_v2
+configs: default pulp pulp_fpu pulp_fpu_zfinx
+seed: 1
+=== CFG=default compile ===
+comp rc=0 wall=16s
+default/corev_rand_arithmetic_base_test PASS rc=0 wall=14s mismatches=na
+default/corev_rand_instr_test PASS rc=0 wall=19s mismatches=na
+default/corev_rand_jump_stress_test PASS rc=0 wall=12s mismatches=na
+default/corev_rand_instr_long_stall PASS rc=0 wall=10s mismatches=na
+default/corev_rand_interrupt PASS rc=0 wall=11s mismatches=na
+default/corev_rand_interrupt_wfi PASS rc=0 wall=21s mismatches=na
+default/corev_rand_interrupt_wfi_mem_stress PASS rc=0 wall=77s mismatches=na
+default/corev_rand_interrupt_exception PASS rc=0 wall=22s mismatches=na
+default/corev_rand_interrupt_nested PASS rc=0 wall=13s mismatches=na
+default/hello-world PASS rc=0 wall=8s mismatches=na
+default/branch_zero PASS rc=0 wall=9s mismatches=na
+default/csr_instr_asm PASS rc=0 wall=7s mismatches=na
+default/csr_instructions PASS rc=0 wall=9s mismatches=na
+default/cv32e40p_csr_access_test PASS rc=0 wall=28s mismatches=na
+default/cv32e40p_readonly_csr_access_test PASS rc=0 wall=6s mismatches=na
+default/dhrystone PASS rc=0 wall=55s mismatches=na
+default/fibonacci PASS rc=0 wall=30s mismatches=na
+default/generic_exception_test PASS rc=0 wall=10s mismatches=na
+default/hpmcounter_basic_test PASS rc=0 wall=28s mismatches=na
+default/hpmcounter_hazard_test PASS rc=0 wall=12s mismatches=na
+default/illegal PASS rc=0 wall=7s mismatches=na
+default/illegal_instr_test PASS rc=0 wall=255s mismatches=na
+default/interrupt_bootstrap PASS rc=0 wall=14s mismatches=na
+default/interrupt_test FAIL rc=2 wall=33s mismatches=5381
+default/isa_fcov_holes PASS rc=0 wall=6s mismatches=na
+default/mhpmcounter29_csr_access_test_1 PASS rc=0 wall=6s mismatches=na
+default/misalign PASS rc=0 wall=87s mismatches=na
+default/modeled_csr_por PASS rc=0 wall=14s mismatches=na
+default/perf_counters_instructions PASS rc=0 wall=24s mismatches=na
+default/requested_csr_por PASS rc=0 wall=18s mismatches=na
+default/riscv_arithmetic_basic_test_0 PASS rc=0 wall=9s mismatches=na
+default/riscv_arithmetic_basic_test_1 PASS rc=0 wall=11s mismatches=na
+default/corev_rand_debug NO_SIM rc=2 wall=4s mismatches=na
+default/corev_rand_debug_ebreak NO_SIM rc=2 wall=5s mismatches=na
+default/corev_rand_debug_single_step NO_SIM rc=2 wall=5s mismatches=na
+default/corev_rand_interrupt_debug NO_SIM rc=2 wall=5s mismatches=na
+default/debug_test PASS rc=0 wall=334s mismatches=na
+default/debug_test_boot_set PASS rc=0 wall=7s mismatches=na
+default/debug_test_known_miscompares PASS rc=0 wall=8s mismatches=na
+default/debug_test_reset PASS rc=0 wall=7s mismatches=na
+default/riscv_ebreak_test_0 PASS rc=0 wall=16s mismatches=na
+default/corev_rand_illegal_instr_test NO_SIM rc=2 wall=5s mismatches=na
+default/debug_test_trigger FAIL rc=2 wall=8s mismatches=101
+default/matmul_32b_int FAIL rc=2 wall=5s mismatches=na
+default/coremark KNOWN_FAIL rc=2 wall=5s mismatches=na
+=== CFG=pulp compile ===
+comp rc=2 wall=3s
+COMP_FAIL pulp - lane skipped (see pulp/comp.log)
+=== CFG=pulp_fpu compile ===
+comp rc=2 wall=2s
+COMP_FAIL pulp_fpu - lane skipped (see pulp_fpu/comp.log)
+=== CFG=pulp_fpu_zfinx compile ===
+comp rc=2 wall=1s
+COMP_FAIL pulp_fpu_zfinx - lane skipped (see pulp_fpu_zfinx/comp.log)
+=== TOTAL: 36 PASS / 11 FAIL / 1 KNOWN_FAIL / 0 SKIP ===
+--- non-PASS (known-fail and skips excluded):
+default/interrupt_test FAIL rc=2 wall=33s mismatches=5381
+default/corev_rand_debug NO_SIM rc=2 wall=4s mismatches=na
+default/corev_rand_debug_ebreak NO_SIM rc=2 wall=5s mismatches=na
+default/corev_rand_debug_single_step NO_SIM rc=2 wall=5s mismatches=na
+default/corev_rand_interrupt_debug NO_SIM rc=2 wall=5s mismatches=na
+default/corev_rand_illegal_instr_test NO_SIM rc=2 wall=5s mismatches=na
+default/debug_test_trigger FAIL rc=2 wall=8s mismatches=101
+default/matmul_32b_int FAIL rc=2 wall=5s mismatches=na
+COMP_FAIL pulp - lane skipped (see pulp/comp.log)
+COMP_FAIL pulp_fpu - lane skipped (see pulp_fpu/comp.log)
+COMP_FAIL pulp_fpu_zfinx - lane skipped (see pulp_fpu_zfinx/comp.log)
+quick_val end: 2026-09-21T16:27:16+02:00

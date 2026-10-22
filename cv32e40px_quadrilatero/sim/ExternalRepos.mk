@@ -18,7 +18,10 @@ CV_CORE_BRANCH ?= main
 CV_CORE_HASH   ?= head
 CV_CORE_TAG    ?= none
 
-QUADRILATERO_REPO   ?= https://github.com/pulp-platform/quadrilatero
+QUADRILATERO_REPO ?= <INSERT_QUADRILATERO_REPO_URL_HERE>
+QUADRILATERO_REV  ?= <INSERT_QUADRILATERO_REVISION_HASH_HERE>
+
+include ../ExternalRepos.local.mk 
 
 # The CV_CORE_HASH above points to version of the RTL that is newer.
 # It is logically equivalent with respect to v1.0.0 RTL freeze version with all parameters disabled.

@@ -1,0 +1,42 @@
+# GVSOC_TRACE regression test list — single source of truth.
+# Consumed by cv32e40p/sim/uvmt/run_gvsoc_trace_regress.sh
+# (the test list lives here, not embedded in the bash script).
+#
+# Each entry is "<test> <cfg>".
+# ORDER MATTERS: the first entry of each cfg compiles the testbench (COMP=YES);
+# the remaining entries of that cfg run COMP=NO in parallel.
+tests:
+  # --- cfg: default ---
+  - hello-world default
+  - fibonacci default
+  - dhrystone default
+  - misalign default
+  - illegal default
+  - riscv_ebreak_test_0 default
+  - riscv_arithmetic_basic_test_0 default
+  - riscv_arithmetic_basic_test_1 default
+  - illegal_instr_test default
+  - csr_instructions default
+  - csr_instr_asm default
+  - cv32e40p_csr_access_test default
+  - cv32e40p_readonly_csr_access_test default
+  - requested_csr_por default
+  - modeled_csr_por default
+  - hpmcounter_basic_test default
+  - hpmcounter_hazard_test default
+  - perf_counters_instructions default
+  - mhpmcounter29_csr_access_test_1 default
+  - generic_exception_test default
+  - isa_fcov_holes default
+  # --- cfg: pulp ---
+  - fibonacci pulp
+  - pulp_general_alu pulp
+  - pulp_hardware_loop pulp
+  - pulp_bit_manipulation pulp
+  - pulp_multiply_accumulate pulp
+  - pulp_post_increment_load_store pulp
+  - custom_opcode_illegal_test pulp
+  # --- cfg: pulp_fpu ---
+  - csr_instructions pulp_fpu
+  - cv32e40p_csr_access_test pulp_fpu
+  - cv32e40p_readonly_csr_access_test pulp_fpu

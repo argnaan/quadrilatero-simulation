@@ -1,0 +1,47 @@
+###############################################################################
+# Variables to determine the the command to clone external repositories.
+# For each repo there are a set of variables:
+#      *_REPO:   URL to the repository in GitHub.
+#      *_BRANCH: Name of the branch you wish to clone;
+#                Set to 'master' to pull the master branch.
+#      *_HASH:   Value of the specific hash you wish to clone;
+#                Set to 'head' to pull the head of the branch you want.
+# THe CV32E40P repo also has a variable to clone a specific tag:
+#      *_TAG:    Value of the specific tag you wish to clone;
+#                Will override the HASH unless set to "none".
+#
+
+export SHELL = /bin/bash
+
+CV_CORE_REPO   ?= https://github.com/ryk02/cv32e40px
+CV_CORE_BRANCH ?= main
+CV_CORE_HASH   ?= head
+CV_CORE_TAG    ?= none
+
+QUADRILATERO_REPO   ?= https://github.com/pulp-platform/quadrilatero
+
+# The CV_CORE_HASH above points to version of the RTL that is newer.
+# It is logically equivalent with respect to v1.0.0 RTL freeze version with all parameters disabled.
+# There are some implementation and testbench updates in the above hash.
+# Set CV_CORE_TAG as below to point to the exact cv32e40p repo as that used at RTL freeze
+#CV_CORE_TAG    ?= cv32e40p_v1.0.0
+
+RISCVDV_REPO    ?= https://github.com/google/riscv-dv
+RISCVDV_BRANCH  ?= master
+RISCVDV_HASH    ?= 96c1ee6f371f2754c45b4831fcab95f6671689d9
+
+EMBENCH_REPO    ?= https://github.com/embench/embench-iot.git
+EMBENCH_BRANCH  ?= master
+EMBENCH_HASH    ?= 6934ddd1ff445245ee032d4258fdeb9828b72af4
+
+# SVLIB
+SVLIB_REPO       ?= https://bitbucket.org/verilab/svlib/src/master/svlib
+SVLIB_BRANCH     ?= master
+SVLIB_HASH       ?= c25509a7e54a880fe8f58f3daa2f891d6ecf6428
+
+#riscv-arch-test suite with riscof
+# Pinned to 3.9.1: 4.0.0 dropped riscv-test-suite/rv32i_m/, the directory the
+# RV32 test lists are generated from.
+RISCOF_ARCH_TEST_SUITE_REPO    ?= https://github.com/riscv/riscv-arch-test.git
+RISCOF_ARCH_TEST_SUITE_BRANCH  ?= main
+RISCOF_ARCH_TEST_SUITE_TAG     ?= 3.9.1

@@ -1,0 +1,7 @@
+
+// Dual-trace mode: USE_ISS=YES + RVVI_TRACE=YES together.
+// Extra source needed ALONGSIDE gvsoc.flist (which already provides
+// rvviApiPkg.sv + rvviTrace.sv) -- just the SV tracer. Its driving logic
+// compiles out under `ifndef USE_ISS, so it reads the same rvvi_if that
+// uvmt_cv32e40p_gvsoc_wrap.sv drives, read-only.
+${TBSRC_HOME}/uvmt/uvmt_cv32e40p_rvvi_text_tracer.sv

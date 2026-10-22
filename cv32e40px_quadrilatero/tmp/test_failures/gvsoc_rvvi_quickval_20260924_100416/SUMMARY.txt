@@ -1,0 +1,21 @@
+quick_val start: 2026-09-24T10:04:16+02:00
+reference core: iss_v2
+configs: pulp_fpu_zfinx
+seed: 1
+=== CFG=pulp_fpu_zfinx compile ===
+comp rc=0 wall=21s
+pulp_fpu_zfinx/fpu_bugs_test FAIL rc=2 wall=4s mismatches=na
+pulp_fpu_zfinx/illegal_fp_instr_test PASS rc=0 wall=174s mismatches=na
+pulp_fpu_zfinx/corev_rand_fp_instr_test PASS rc=0 wall=14s mismatches=na
+pulp_fpu_zfinx/corev_rand_fp_instr_sanity_test PASS rc=0 wall=25s mismatches=na
+pulp_fpu_zfinx/corev_rand_fp_instr_data_fwd_test PASS rc=0 wall=22s mismatches=na
+pulp_fpu_zfinx/corev_rand_fp_instr_mlt_cyc_test PASS rc=0 wall=11s mismatches=na
+pulp_fpu_zfinx/corev_rand_fp_instr_w_special_ops_test PASS rc=0 wall=13s mismatches=na
+pulp_fpu_zfinx/corev_fp_mstatus_fs_test PASS rc=0 wall=12s mismatches=na
+pulp_fpu_zfinx/fpu_func_cov_improve_test SKIP (F-only program (Zfinx config has no F register file))
+pulp_fpu_zfinx/zfinx_func_cov_improve_test PASS rc=0 wall=7s mismatches=na
+pulp_fpu_zfinx/interrupt_test_zfinx_cfg KNOWN_FAIL rc=2 wall=34s mismatches=4987
+=== TOTAL: 8 PASS / 1 FAIL / 1 KNOWN_FAIL / 1 SKIP ===
+--- non-PASS (known-fail and skips excluded):
+pulp_fpu_zfinx/fpu_bugs_test FAIL rc=2 wall=4s mismatches=na
+quick_val end: 2026-09-24T10:09:53+02:00

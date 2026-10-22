@@ -1,0 +1,19 @@
+quick_val start: 2026-09-22T11:59:05+02:00
+reference core: iss_v2
+configs: pulp pulp_fpu pulp_fpu_zfinx
+seed: 1
+=== CFG=pulp compile ===
+comp rc=2 wall=7s
+COMP_FAIL pulp - lane skipped (see pulp/comp.log)
+=== CFG=pulp_fpu compile ===
+comp rc=2 wall=1s
+COMP_FAIL pulp_fpu - lane skipped (see pulp_fpu/comp.log)
+=== CFG=pulp_fpu_zfinx compile ===
+comp rc=2 wall=2s
+COMP_FAIL pulp_fpu_zfinx - lane skipped (see pulp_fpu_zfinx/comp.log)
+=== TOTAL: 0 PASS / 3 FAIL / 0 KNOWN_FAIL / 0 SKIP ===
+--- non-PASS (known-fail and skips excluded):
+COMP_FAIL pulp - lane skipped (see pulp/comp.log)
+COMP_FAIL pulp_fpu - lane skipped (see pulp_fpu/comp.log)
+COMP_FAIL pulp_fpu_zfinx - lane skipped (see pulp_fpu_zfinx/comp.log)
+quick_val end: 2026-09-22T11:59:15+02:00

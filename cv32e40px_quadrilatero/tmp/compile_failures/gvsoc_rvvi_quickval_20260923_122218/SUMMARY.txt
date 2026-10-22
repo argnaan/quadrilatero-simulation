@@ -1,0 +1,55 @@
+quick_val start: 2026-09-23T12:22:18+02:00
+reference core: iss_v2
+configs: pulp_fpu pulp_fpu_zfinx
+seed: 1
+=== CFG=pulp_fpu compile ===
+comp rc=0 wall=22s
+pulp_fpu/fpu_bugs_test PASS rc=0 wall=8s mismatches=na
+pulp_fpu/illegal_fp_instr_test FAIL rc=2 wall=7s mismatches=na
+pulp_fpu/corev_rand_fp_instr_test NO_SIM rc=2 wall=6s mismatches=na
+pulp_fpu/corev_rand_fp_instr_sanity_test NO_SIM rc=2 wall=5s mismatches=na
+pulp_fpu/corev_rand_fp_instr_data_fwd_test NO_SIM rc=2 wall=6s mismatches=na
+pulp_fpu/corev_rand_fp_instr_mlt_cyc_test NO_SIM rc=2 wall=5s mismatches=na
+pulp_fpu/corev_rand_fp_instr_w_special_ops_test NO_SIM rc=2 wall=6s mismatches=na
+pulp_fpu/corev_fp_mstatus_fs_test NO_SIM rc=2 wall=6s mismatches=na
+pulp_fpu/fpu_func_cov_improve_test FAIL rc=2 wall=7s mismatches=na
+pulp_fpu/matmul_32b_float PASS rc=0 wall=15s mismatches=na
+pulp_fpu/corev_directed_for_interrupt_covg_test NO_SIM rc=2 wall=6s mismatches=na
+pulp_fpu/zfinx_func_cov_improve_test SKIP (Zfinx-only program (F-config assembler rejects x-register FP operands))
+pulp_fpu/corev_rand_fp_instr_debug_test_with_int_and_debug KNOWN_FAIL rc=2 wall=6s mismatches=na
+pulp_fpu/corev_rand_fp_instr_debug_test_with_int_and_debug_single_step KNOWN_FAIL rc=2 wall=6s mismatches=na
+pulp_fpu/corev_rand_fp_instr_debug_test_with_int_and_debug_trigger KNOWN_FAIL rc=2 wall=6s mismatches=na
+pulp_fpu/corev_rand_fp_instr_debug_test_with_int_debug_trigger_and_single_step KNOWN_FAIL rc=2 wall=6s mismatches=na
+=== CFG=pulp_fpu_zfinx compile ===
+comp rc=0 wall=25s
+pulp_fpu_zfinx/fpu_bugs_test PASS rc=0 wall=9s mismatches=na
+pulp_fpu_zfinx/illegal_fp_instr_test FAIL rc=2 wall=7s mismatches=na
+pulp_fpu_zfinx/corev_rand_fp_instr_test NO_SIM rc=2 wall=6s mismatches=na
+pulp_fpu_zfinx/corev_rand_fp_instr_sanity_test NO_SIM rc=2 wall=6s mismatches=na
+pulp_fpu_zfinx/corev_rand_fp_instr_data_fwd_test NO_SIM rc=2 wall=5s mismatches=na
+pulp_fpu_zfinx/corev_rand_fp_instr_mlt_cyc_test NO_SIM rc=2 wall=6s mismatches=na
+pulp_fpu_zfinx/corev_rand_fp_instr_w_special_ops_test NO_SIM rc=2 wall=5s mismatches=na
+pulp_fpu_zfinx/corev_fp_mstatus_fs_test NO_SIM rc=2 wall=6s mismatches=na
+pulp_fpu_zfinx/fpu_func_cov_improve_test SKIP (F-only program (Zfinx config has no F register file))
+pulp_fpu_zfinx/zfinx_func_cov_improve_test FAIL rc=2 wall=7s mismatches=na
+pulp_fpu_zfinx/interrupt_test_zfinx_cfg KNOWN_FAIL rc=2 wall=8s mismatches=na
+=== TOTAL: 3 PASS / 17 FAIL / 5 KNOWN_FAIL / 2 SKIP ===
+--- non-PASS (known-fail and skips excluded):
+pulp_fpu/illegal_fp_instr_test FAIL rc=2 wall=7s mismatches=na
+pulp_fpu/corev_rand_fp_instr_test NO_SIM rc=2 wall=6s mismatches=na
+pulp_fpu/corev_rand_fp_instr_sanity_test NO_SIM rc=2 wall=5s mismatches=na
+pulp_fpu/corev_rand_fp_instr_data_fwd_test NO_SIM rc=2 wall=6s mismatches=na
+pulp_fpu/corev_rand_fp_instr_mlt_cyc_test NO_SIM rc=2 wall=5s mismatches=na
+pulp_fpu/corev_rand_fp_instr_w_special_ops_test NO_SIM rc=2 wall=6s mismatches=na
+pulp_fpu/corev_fp_mstatus_fs_test NO_SIM rc=2 wall=6s mismatches=na
+pulp_fpu/fpu_func_cov_improve_test FAIL rc=2 wall=7s mismatches=na
+pulp_fpu/corev_directed_for_interrupt_covg_test NO_SIM rc=2 wall=6s mismatches=na
+pulp_fpu_zfinx/illegal_fp_instr_test FAIL rc=2 wall=7s mismatches=na
+pulp_fpu_zfinx/corev_rand_fp_instr_test NO_SIM rc=2 wall=6s mismatches=na
+pulp_fpu_zfinx/corev_rand_fp_instr_sanity_test NO_SIM rc=2 wall=6s mismatches=na
+pulp_fpu_zfinx/corev_rand_fp_instr_data_fwd_test NO_SIM rc=2 wall=5s mismatches=na
+pulp_fpu_zfinx/corev_rand_fp_instr_mlt_cyc_test NO_SIM rc=2 wall=6s mismatches=na
+pulp_fpu_zfinx/corev_rand_fp_instr_w_special_ops_test NO_SIM rc=2 wall=5s mismatches=na
+pulp_fpu_zfinx/corev_fp_mstatus_fs_test NO_SIM rc=2 wall=6s mismatches=na
+pulp_fpu_zfinx/zfinx_func_cov_improve_test FAIL rc=2 wall=7s mismatches=na
+quick_val end: 2026-09-23T12:25:51+02:00

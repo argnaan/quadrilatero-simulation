@@ -1,0 +1,62 @@
+quick_val start: 2026-09-23T16:57:14+02:00
+reference core: iss_v2
+configs: default
+seed: 1
+=== CFG=default compile ===
+comp rc=0 wall=18s
+default/corev_rand_arithmetic_base_test PASS rc=0 wall=13s mismatches=na
+default/corev_rand_instr_test PASS rc=0 wall=20s mismatches=na
+default/corev_rand_jump_stress_test PASS rc=0 wall=11s mismatches=na
+default/corev_rand_instr_long_stall PASS rc=0 wall=13s mismatches=na
+default/corev_rand_interrupt PASS rc=0 wall=9s mismatches=na
+default/corev_rand_interrupt_wfi PASS rc=0 wall=22s mismatches=na
+default/corev_rand_interrupt_wfi_mem_stress PASS rc=0 wall=77s mismatches=na
+default/corev_rand_interrupt_exception PASS rc=0 wall=22s mismatches=na
+default/corev_rand_interrupt_nested PASS rc=0 wall=13s mismatches=na
+default/hello-world PASS rc=0 wall=9s mismatches=na
+default/branch_zero PASS rc=0 wall=8s mismatches=na
+default/csr_instr_asm PASS rc=0 wall=8s mismatches=na
+default/csr_instructions PASS rc=0 wall=9s mismatches=na
+default/cv32e40p_csr_access_test PASS rc=0 wall=29s mismatches=na
+default/cv32e40p_readonly_csr_access_test PASS rc=0 wall=6s mismatches=na
+default/dhrystone PASS rc=0 wall=53s mismatches=na
+default/fibonacci PASS rc=0 wall=32s mismatches=na
+default/generic_exception_test PASS rc=0 wall=10s mismatches=na
+default/hpmcounter_basic_test PASS rc=0 wall=30s mismatches=na
+default/hpmcounter_hazard_test PASS rc=0 wall=11s mismatches=na
+default/illegal PASS rc=0 wall=7s mismatches=na
+default/illegal_instr_test PASS rc=0 wall=258s mismatches=na
+default/interrupt_bootstrap PASS rc=0 wall=13s mismatches=na
+default/interrupt_test FAIL rc=2 wall=32s mismatches=5381
+default/isa_fcov_holes PASS rc=0 wall=5s mismatches=na
+default/mhpmcounter29_csr_access_test_1 PASS rc=0 wall=5s mismatches=na
+default/misalign PASS rc=0 wall=84s mismatches=na
+default/modeled_csr_por PASS rc=0 wall=14s mismatches=na
+default/perf_counters_instructions PASS rc=0 wall=24s mismatches=na
+default/requested_csr_por PASS rc=0 wall=20s mismatches=na
+default/riscv_arithmetic_basic_test_0 PASS rc=0 wall=9s mismatches=na
+default/riscv_arithmetic_basic_test_1 PASS rc=0 wall=11s mismatches=na
+default/corev_rand_debug NO_SIM rc=2 wall=4s mismatches=na
+default/corev_rand_debug_ebreak NO_SIM rc=2 wall=6s mismatches=na
+default/corev_rand_debug_single_step NO_SIM rc=2 wall=4s mismatches=na
+default/corev_rand_interrupt_debug NO_SIM rc=2 wall=4s mismatches=na
+default/debug_test PASS rc=0 wall=339s mismatches=na
+default/debug_test_boot_set PASS rc=0 wall=8s mismatches=na
+default/debug_test_known_miscompares PASS rc=0 wall=9s mismatches=na
+default/debug_test_reset PASS rc=0 wall=7s mismatches=na
+default/riscv_ebreak_test_0 PASS rc=0 wall=15s mismatches=na
+default/corev_rand_illegal_instr_test NO_SIM rc=2 wall=5s mismatches=na
+default/debug_test_trigger FAIL rc=2 wall=9s mismatches=101
+default/matmul_32b_int FAIL rc=2 wall=5s mismatches=na
+default/coremark KNOWN_FAIL rc=2 wall=5s mismatches=na
+=== TOTAL: 36 PASS / 8 FAIL / 1 KNOWN_FAIL / 0 SKIP ===
+--- non-PASS (known-fail and skips excluded):
+default/interrupt_test FAIL rc=2 wall=32s mismatches=5381
+default/corev_rand_debug NO_SIM rc=2 wall=4s mismatches=na
+default/corev_rand_debug_ebreak NO_SIM rc=2 wall=6s mismatches=na
+default/corev_rand_debug_single_step NO_SIM rc=2 wall=4s mismatches=na
+default/corev_rand_interrupt_debug NO_SIM rc=2 wall=4s mismatches=na
+default/corev_rand_illegal_instr_test NO_SIM rc=2 wall=5s mismatches=na
+default/debug_test_trigger FAIL rc=2 wall=9s mismatches=101
+default/matmul_32b_int FAIL rc=2 wall=5s mismatches=na
+quick_val end: 2026-09-23T17:19:19+02:00

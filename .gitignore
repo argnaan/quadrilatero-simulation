@@ -102,3 +102,4 @@ cv32e40p/sim/uvmt/regress_results/
 sourceme_mamuthones.sh
 bin/my_venv/*
 cv32e40px_quadrilatero/sim/core/etch392559
+cv32e40px_quadrilatero/sim/ExternalRepos.local.mk
