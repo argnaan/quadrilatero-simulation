@@ -1,10 +1,9 @@
-
 void __attribute__ ((noinline)) FUNC_NAME(void* addrA,void* addrB, void* addrC, int K, int N, int M, int widening)
-{
+{   
     asm volatile(  
 
         // 1. Data Types Configuration
-        "mmac.dt %[dt_typeC], %[dt_typeA], %[dt_typeB] \n\t"
+        "mmac.dt %[dt_typeA], %[dt_typeB], %[dt_typeC] \n\t"
         "mcfgm t3, %[M], %[rmul]    \n\t"
         "mcfgn t4, %[N], %[cmul]    \n\t"
         "mcfgk t5, %[K]             \n\t"   // t5 = first block depth

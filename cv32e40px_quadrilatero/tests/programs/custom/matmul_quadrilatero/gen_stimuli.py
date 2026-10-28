@@ -1,15 +1,18 @@
 import sys
 import random
 import math
-M = 16
-N = 16
-K = 16
+
+M = 32
+N = 32
+K = 32
 
 A_dtype = "int8_t"
 B_dtype = "int8_t"
 C_dtype = "int32_t"
 
 header_file = "matrixData.h"
+
+random.seed(42)
 
 def datatype_width(dtype):
     if dtype == "int32_t" or dtype == "uint32_t": 
@@ -30,34 +33,45 @@ def get_quadrilatero_dt(dtype):
     elif dtype == "uint32_t": return 10 # __UINT32__
     else: return 0
 
-def write_arr(f, name, arr, ctype, size):
-    f.write(f'{ctype} __attribute__((section(".data"))) {name}[] = {{\n')
-    for i, v in enumerate(arr, 1):
-        terminator = ",\n" if i % size == 0 else ","
-        f.write(f'{v}{terminator}')
-    f.write('};\n\n')
 
+def is_unsigned(dtype):
+    return dtype.startswith("u")
 
-matA = []
-matBT = []
-matC_gold = []
+def rand_range(dtype):
+    w = datatype_width(dtype)
+    if is_unsigned(dtype):
+        return 0, min(2**w - 1, 100)
+    return max(-2**(w-1), -100), min(2**(w-1) - 1, 100)
 
-for i in range(M):
-    for j in range(K):
-        a = random.randint(-2**(datatype_width(A_dtype)-1), 2**(datatype_width(A_dtype)-1)-1)
-        matA.append(a)
+pf = 32 // datatype_width(A_dtype)   # 1 per int32, 2 per int16, 4 per int8
+assert pf == 32 // datatype_width(B_dtype), "A and B must have the same datatype width"
 
-for i in range(N):
-    for j in range(K):
-        b = random.randint(-2**(datatype_width(B_dtype)-1), 2**(datatype_width(B_dtype)-1)-1)
-        matBT.append(b)
+def pack_k(mat, rows, cols, pf):
+    """mat[k][x] -> lista ordinata [k//pf][x][k%pf], con zero padding su k"""
+    out = []
+    for kb in range(0, rows, pf):
+        for x in range(cols):
+            for j in range(pf):
+                k = kb + j
+                out.append(mat[k][x] if k < rows else 0)
+    return out
 
-for i in range(M):
-    for j in range(N):
-        r = 0
-        for k in range(K):
-            r += matA[i*K + k] * matBT[j*K + k]
-        matC_gold.append(r)
+lo_a, hi_a = rand_range(A_dtype)
+lo_b, hi_b = rand_range(B_dtype)
+lo_a=1
+hi_a=1
+lo_b=1
+hi_b=1
+A = [[random.randint(lo_a, hi_a) for _ in range(K)] for _ in range(M)]
+B = [[random.randint(lo_b, hi_b) for _ in range(N)] for _ in range(K)]
+
+AT = [[A[m][k] for m in range(M)] for k in range(K)]   # [K][M]
+
+matAT = pack_k(AT, K, M, pf)
+matB  = pack_k(B,  K, N, pf)
+
+matC_gold = [sum(A[m][k] * B[k][n] for k in range(K))
+             for m in range(M) for n in range(N)]
 
 f = open(header_file, 'w')
 f.write('#ifndef _MATRIX_DATA_\n')
@@ -83,8 +97,18 @@ f.write(f'#define RMUL_2 1\n')
 f.write(f'#define CMUL_2 1\n\n')
 f.write(f'#define FUNC_NAME matmul_custom\n\n')
 
-write_arr(f, 'matA', matA, A_dtype, K)
-write_arr(f, 'matBT', matBT, B_dtype, K)
+def write_arr(f, name, arr, ctype, size):
+    f.write(f'{ctype} __attribute__((section(".data"), aligned(4))) {name}[] = {{\n')
+    for i, v in enumerate(arr, 1):
+        f.write(f'{v}')
+        if i % size == 0:
+            f.write(',\n')
+        else:
+            f.write(',')
+    f.write('};\n\n')
+
+write_arr(f, 'matAT', matAT, A_dtype, M * pf)
+write_arr(f, 'matB',  matB,  B_dtype, N * pf)
 write_arr(f, 'matC_gold', matC_gold, C_dtype, N)
 
 f.write('#endif // _MATRIX_DATA_\n')

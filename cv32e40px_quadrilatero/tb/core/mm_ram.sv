@@ -53,7 +53,7 @@ module mm_ram
      output logic                         data_gnt_o,
      
      input logic [QUAD_N_PORTS-1:0]        quad_req_i,
-     input logic [QUAD_N_PORTS-1:0][31:0]  quad_addr_i,
+     input logic [QUAD_N_PORTS-1:0][RAM_ADDR_WIDTH-1:0]  quad_addr_i,
      input logic [QUAD_N_PORTS-1:0]        quad_we_i,
      input logic [QUAD_N_PORTS-1:0][3:0]   quad_be_i,
      input logic [QUAD_N_PORTS-1:0][31:0]  quad_wdata_i,

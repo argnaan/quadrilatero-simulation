@@ -3,11 +3,12 @@
 #include "matrixData.h"
 #include "matmul.h"
 
-#define WAIT_COMPLETE 100
+#define WAIT_COMPLETE 10
 
-C_DTYPE matC[DIM_M*DIM_N] = {};
+C_DTYPE __attribute__((section(".data"), aligned(4))) matC[DIM_M*DIM_N] = {};
 
 #define PRINTF(fmt, ...)    printf(fmt, ## __VA_ARGS__)
+//#define PRINTF(fmt, ...)    
 
 #if DTC == 0 | DTC == 1 | DTC == 2 | DTC == 8 | DTC == 9 | DTC == 10
     #define CHECK_CONDITION int_condition
@@ -29,7 +30,7 @@ int main() {
     __asm__ volatile("csrw 0xb02, %0" ::"r"(zero));
     __asm__ volatile("csrw 0x320, %0" ::"r"(enable));
 
-    matmul_custom(matA, matBT, matC, DIM_K, DIM_N, DIM_M, WIDENING);
+    matmul_custom(matAT, matB, matC, DIM_K, DIM_N, DIM_M, WIDENING);
 
     for(volatile int i=0; i<WAIT_COMPLETE; i++);
 
@@ -37,7 +38,7 @@ int main() {
 
     __asm__ volatile("csrr %0, 0xb00" : "=r"(cycles));
 
-    PRINTF("program finished with %d errors and %d cycles\n\r", errors, cycles);
+    PRINTF("Program finished with %d errors and %d cycles\n\r", errors, cycles);
 
     return errors;
 }
@@ -46,7 +47,7 @@ int float_condition(int index){
     C_DTYPE diff;
 
     diff = matC[index] - matC_gold[index];
-    diff = diff * (diff >= 0);
+    if (diff < 0) diff = -diff; 
     return (diff > 0.001f);
 }
 
@@ -58,12 +59,12 @@ uint32_t check_results()
 {
     int i, j;
     uint32_t err = 0;
- 
+
     for(i = 0; i < DIM_M; i++) {
         for(j = 0; j < DIM_N; j++) {
            if(CHECK_CONDITION(i*DIM_N+j)) {
                 err ++;
-                PRINTF("Error at index %d, %d, expected %x, got %x\n\r", i, j, matC_gold[i*DIM_N+j], matC[i*DIM_N+j]);
+                PRINTF("Error at index %d, %d, expected %d, got %d\n\r", i, j, matC_gold[i*DIM_N+j], matC[i*DIM_N+j]);
             }
         }
     }

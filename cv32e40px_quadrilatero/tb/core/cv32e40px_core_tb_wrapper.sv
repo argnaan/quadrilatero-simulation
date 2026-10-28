@@ -258,7 +258,7 @@ module cv32e40px_core_tb_wrapper
          .quad_req_i      ( quad_req                                 ),
          .quad_we_i       ( quad_we                                  ),
          .quad_be_i       ( quad_be                                  ),
-         .quad_addr_i     ( quad_addr                                ),
+         .quad_addr_i     ( quad_addr_ram                            ),
          .quad_wdata_i    ( quad_wdata                               ),
          .quad_gnt_o      ( quad_gnt                                 ),
          .quad_rvalid_o   ( quad_rvalid                              ),
